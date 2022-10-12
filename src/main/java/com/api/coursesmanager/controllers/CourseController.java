@@ -60,4 +60,15 @@ public class CourseController {
         courseModel.setRegistrationDate(courseModelOptional.get().getRegistrationDate());
         return ResponseEntity.status(HttpStatus.OK).body(courseService.save(courseModel));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCourse(@PathVariable(value = "id") UUID id){
+        Optional<CourseModel> courseModelOptional = courseService.findById(id);
+        if (!courseModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
+        }
+        courseService.delete(courseModelOptional.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully.");
+    }
 }

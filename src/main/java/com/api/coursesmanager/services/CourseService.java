@@ -29,4 +29,8 @@ public class CourseService {
     public Optional<CourseModel> findById(UUID id) {
         return courseRepository.findById(id);
     }
+
+    public void delete(CourseModel courseModel) {
+        courseRepository.delete(courseModel);
+    }
 }
