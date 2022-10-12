@@ -8,15 +8,13 @@ import com.api.coursesmanager.services.StudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/students")
@@ -52,5 +50,19 @@ public class StudentController {
         studentModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         studentModel.setCourse(courseModelOptional.get());
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.save(studentModel));
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllStudents(){
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getStudentById(@PathVariable(value = "id") UUID id){
+        Optional<StudentModel> optionalStudentModel = studentService.findById(id);
+        if (!optionalStudentModel.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(optionalStudentModel.get());
     }
 }
