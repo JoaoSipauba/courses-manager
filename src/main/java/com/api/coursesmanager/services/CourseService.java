@@ -30,6 +30,7 @@ public class CourseService {
         return courseRepository.findById(id);
     }
 
+    @Transactional
     public void delete(CourseModel courseModel) {
         courseRepository.delete(courseModel);
     }
