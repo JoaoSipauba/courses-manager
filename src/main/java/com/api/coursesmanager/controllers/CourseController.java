@@ -47,4 +47,17 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional.get());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateCourse(@PathVariable(value = "id") UUID id,
+                                               @RequestBody @Valid CourseDto courseDto){
+        Optional<CourseModel> courseModelOptional = courseService.findById(id);
+        if (!courseModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
+        }
+        var courseModel = new CourseModel();
+        BeanUtils.copyProperties(courseDto, courseModel);
+        courseModel.setId(courseModelOptional.get().getId());
+        courseModel.setRegistrationDate(courseModelOptional.get().getRegistrationDate());
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.save(courseModel));
+    }
 }
