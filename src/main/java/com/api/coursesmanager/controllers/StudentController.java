@@ -33,7 +33,7 @@ public class StudentController {
         var courseId = studentDto.getCourse();
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
 
-        if (!courseModelOptional.isPresent()){
+        if (courseModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
         }
         if (studentService.existsByCpf(studentDto.getCpf())){
@@ -60,7 +60,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getStudentById(@PathVariable(value = "id") UUID id){
         Optional<StudentModel> studentModelOptional = studentService.findById(id);
-        if (!studentModelOptional.isPresent()){
+        if (studentModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(studentModelOptional.get());
