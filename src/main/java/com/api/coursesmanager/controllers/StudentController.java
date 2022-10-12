@@ -59,10 +59,10 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getStudentById(@PathVariable(value = "id") UUID id){
-        Optional<StudentModel> optionalStudentModel = studentService.findById(id);
-        if (!optionalStudentModel.isPresent()){
+        Optional<StudentModel> studentModelOptional = studentService.findById(id);
+        if (!studentModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(optionalStudentModel.get());
+        return ResponseEntity.status(HttpStatus.OK).body(studentModelOptional.get());
     }
 }

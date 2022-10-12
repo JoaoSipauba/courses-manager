@@ -2,7 +2,9 @@ package com.api.coursesmanager.controllers;
 
 import com.api.coursesmanager.dtos.CourseDto;
 import com.api.coursesmanager.models.CourseModel;
+import com.api.coursesmanager.models.StudentModel;
 import com.api.coursesmanager.services.CourseService;
+import com.api.coursesmanager.services.StudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,9 +23,11 @@ import java.util.UUID;
 public class CourseController {
 
     final CourseService courseService;
+    final StudentService studentService;
 
-    public CourseController(CourseService courseService) {
+    public CourseController(CourseService courseService, StudentService studentService) {
         this.courseService = courseService;
+        this.studentService = studentService;
     }
 
     @PostMapping
@@ -45,6 +50,11 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional.get());
+    }
+
+    @GetMapping("/{id}/students")
+    public ResponseEntity<Object> getStudentsByCourse(@PathVariable(value = "id") UUID id){
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.findByCourseId(id));
     }
 
     @PutMapping("/{id}")

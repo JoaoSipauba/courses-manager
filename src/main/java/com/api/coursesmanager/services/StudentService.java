@@ -30,6 +30,8 @@ public class StudentService {
         return studentRepository.findById(id);
     }
 
+    public List<StudentModel> findByCourseId(UUID id) { return studentRepository.findAllByCourse_Id(id); }
+
     @Transactional
     public void delete(StudentModel studentModel) {
         studentRepository.delete(studentModel);
