@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,6 +31,20 @@ public class CourseController {
         BeanUtils.copyProperties(courseDto, courseModel);
         courseModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.save(courseModel));
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAllCourses(){
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getOneCourse(@PathVariable(value = "id") UUID id){
+        Optional<CourseModel> courseModelOptional = courseService.findById(id);
+        if (!courseModelOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional.get());
     }
 
 }

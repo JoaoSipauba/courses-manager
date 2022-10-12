@@ -5,6 +5,9 @@ import com.api.coursesmanager.repositories.CourseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CourseService {
@@ -17,5 +20,13 @@ public class CourseService {
     @Transactional
     public CourseModel save(CourseModel courseModel){
         return courseRepository.save(courseModel);
+    }
+
+    public List<CourseModel> findAll(){
+        return courseRepository.findAll();
+    }
+
+    public Optional<CourseModel> findById(UUID id) {
+        return courseRepository.findById(id);
     }
 }
