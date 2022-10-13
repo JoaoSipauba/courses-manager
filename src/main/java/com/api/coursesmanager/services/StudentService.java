@@ -33,8 +33,8 @@ public class StudentService {
     public List<StudentModel> findByCourseId(UUID id) { return studentRepository.findAllByCourse_Id(id); }
 
     @Transactional
-    public void delete(StudentModel studentModel) {
-        studentRepository.delete(studentModel);
+    public void delete(UUID id) {
+        studentRepository.deleteById(id);
     }
 
     public boolean existsByCpf(String cpf) {

@@ -82,4 +82,15 @@ public class StudentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(studentService.save(studentModel));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteStudent(@PathVariable(value = "id") UUID id){
+        Optional<StudentModel> studentModelOptional = studentService.findById(id);
+        if (studentModelOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
+        }
+
+        studentService.delete(studentModelOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body("Student deleted successfully.");
+    }
 }
