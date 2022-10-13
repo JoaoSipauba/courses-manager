@@ -20,3 +20,9 @@ spring:
     path: /api-docs
 server:
   port: 3333
+
+# KEYCLOAK CONFIGURATION
+keycloak:
+  client-id: web-app
+  client-secret: IWBER6HtNogkat4GccxBWIcYuD8q8hKe
+  auth-url: http://localhost:8080/realms/courses-manager/protocol/openid-connect/token
