@@ -16,6 +16,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
+            "/authentication/**"
     };
     @Override
     public void configure(final HttpSecurity http) throws Exception {
