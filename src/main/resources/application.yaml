@@ -1,4 +1,9 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/courses-manager
   datasource:
     url: jdbc:postgresql://localhost:5432/courses-manager-db
     username: postgres
