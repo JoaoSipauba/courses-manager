@@ -8,6 +8,7 @@ import com.api.coursesmanager.services.StudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ public class StudentController {
         this.courseService = courseService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Object> saveStudent(@RequestBody @Valid StudentDto studentDto ){
         var studentModel = new StudentModel();
@@ -66,6 +68,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(studentModelOptional.get());
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateStudent(@PathVariable(value = "id") UUID id,
                                               @RequestBody @Valid StudentDto studentDto ){
@@ -83,6 +86,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.OK).body(studentService.save(studentModel));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteStudent(@PathVariable(value = "id") UUID id){
         Optional<StudentModel> studentModelOptional = studentService.findById(id);
