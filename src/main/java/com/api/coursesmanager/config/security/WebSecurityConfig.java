@@ -11,16 +11,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final KeycloakJwtAuthenticationConverter keycloakJwtAuthenticationConverter = new KeycloakJwtAuthenticationConverter();
 
+    private static final String[] AUTH_WHITELIST = {
+            // -- swagger ui
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+    };
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(authz -> authz.antMatchers("/**").authenticated())
+                .authorizeRequests(authz -> authz.antMatchers(AUTH_WHITELIST).permitAll()
+                                .antMatchers("/**").authenticated())
                 .oauth2ResourceServer()
                 .jwt().jwtAuthenticationConverter(keycloakJwtAuthenticationConverter);
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/authentication/**");
-    }
 }
