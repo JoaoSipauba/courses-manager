@@ -2,18 +2,17 @@ package com.api.coursesmanager.controllers;
 
 import com.api.coursesmanager.dtos.CourseDto;
 import com.api.coursesmanager.models.CourseModel;
-import com.api.coursesmanager.models.StudentModel;
 import com.api.coursesmanager.services.CourseService;
 import com.api.coursesmanager.services.StudentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +29,7 @@ public class CourseController {
         this.studentService = studentService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseDto courseDto ){
         var courseModel = new CourseModel();
@@ -57,6 +57,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(studentService.findByCourseId(id));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCourse(@PathVariable(value = "id") UUID id,
                                                @RequestBody @Valid CourseDto courseDto){
@@ -71,6 +72,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.save(courseModel));
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCourse(@PathVariable(value = "id") UUID id){
         Optional<CourseModel> courseModelOptional = courseService.findById(id);
