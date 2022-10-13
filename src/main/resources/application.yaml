@@ -13,3 +13,5 @@ spring:
             non_contextual_creation: true
   api-docs:
     path: /api-docs
+server:
+  port: 3333
