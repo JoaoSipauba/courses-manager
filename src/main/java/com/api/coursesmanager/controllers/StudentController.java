@@ -65,4 +65,21 @@ public class StudentController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(studentModelOptional.get());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateStudent(@PathVariable(value = "id") UUID id,
+                                              @RequestBody @Valid StudentDto studentDto ){
+        Optional<StudentModel> studentModelOptional = studentService.findById(id);
+        if (studentModelOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found.");
+        }
+
+        var studentModel = new StudentModel();
+        BeanUtils.copyProperties(studentDto, studentModel);
+        studentModel.setId(studentModelOptional.get().getId());
+        studentModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        studentModel.setCourse(studentModelOptional.get().getCourse());
+
+        return ResponseEntity.status(HttpStatus.OK).body(studentService.save(studentModel));
+    }
 }
