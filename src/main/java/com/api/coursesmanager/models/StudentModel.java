@@ -12,19 +12,17 @@ import java.util.UUID;
 @Entity
 @Table(name = "TB_STUDENT")
 public class StudentModel implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @Column(nullable = false)
-    private String studentName;
+    private String name;
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
-    @Column(nullable = false)
-    private String endereco;
-    @Column(nullable = false, length = 8)
-    private String cep;
+    @Embedded
+    private AddressModel address;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, length = 11, unique = true)
@@ -45,12 +43,12 @@ public class StudentModel implements Serializable {
         this.id = id;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getName() {
+        return name;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getCpf() {
@@ -61,20 +59,12 @@ public class StudentModel implements Serializable {
         this.cpf = cpf;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public AddressModel getAddress() {
+        return address;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setAddress(AddressModel address) {
+        this.address = address;
     }
 
     public String getEmail() {
