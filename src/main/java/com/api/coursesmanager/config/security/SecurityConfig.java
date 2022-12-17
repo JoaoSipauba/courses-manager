@@ -21,8 +21,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
             // -- swagger ui
             "/v3/api-docs/**",
             "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/authentication/**"
+            "/swagger-ui/**"
     };
 
     @Autowired
@@ -54,7 +53,9 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest().hasRole("USER");
+                .anyRequest().hasRole("USER")
+                .and()
+                .csrf().disable();
     }
 
 }
