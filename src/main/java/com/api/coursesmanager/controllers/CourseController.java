@@ -3,13 +3,17 @@ package com.api.coursesmanager.controllers;
 import com.api.coursesmanager.dtos.CourseDto;
 import com.api.coursesmanager.models.CourseModel;
 import com.api.coursesmanager.services.CourseService;
+import com.api.coursesmanager.services.ReportService;
 import com.api.coursesmanager.services.StudentService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -20,13 +24,12 @@ import java.util.UUID;
 @RequestMapping("/courses")
 public class CourseController {
 
-    final CourseService courseService;
-    final StudentService studentService;
-
-    public CourseController(CourseService courseService, StudentService studentService) {
-        this.courseService = courseService;
-        this.studentService = studentService;
-    }
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private StudentService studentService;
+    @Autowired
+    private ReportService reportService;
 
     @PostMapping
     public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseDto courseDto ){
@@ -78,5 +81,13 @@ public class CourseController {
         courseService.delete(courseModelOptional.get());
 
         return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully.");
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<Object> generateCoursesReport() throws FileNotFoundException, JRException {
+
+        reportService.exportCourses();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
