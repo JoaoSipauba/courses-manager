@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -37,5 +38,7 @@ public class ReportService {
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\coursesReport.pdf");
+//        ByteArrayOutputStream output = new ByteArrayOutputStream();
+//        JasperExportManager.exportReportToPdfStream(jasperPrint, output);
     }
 }
