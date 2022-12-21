@@ -20,10 +20,10 @@ public class ReportService {
     CourseRepository courseRepository;
 
     public void exportCourses() throws FileNotFoundException, JRException {
-        var courseModelList = courseRepository.findAll();
+        var coursesReportProjections = courseRepository.findAllCoursesAndStudentCount();
 
         File file = ResourceUtils.getFile("classpath:reports/Courses.jrxml");
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(courseModelList);
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(coursesReportProjections);
 
         this.generateReport(file, dataSource);
     }
