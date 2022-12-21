@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
@@ -84,7 +85,7 @@ public class CourseController {
     }
 
     @PostMapping("/report")
-    public ResponseEntity<Object> generateCoursesReport() throws FileNotFoundException, JRException {
+    public ResponseEntity<Object> generateCoursesReport() throws FileNotFoundException, JRException, MessagingException {
 
         reportService.exportCourses();
 

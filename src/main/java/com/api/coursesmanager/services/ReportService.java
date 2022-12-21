@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import javax.mail.MessagingException;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +20,10 @@ public class ReportService {
     @Autowired
     CourseRepository courseRepository;
 
-    public void exportCourses() throws FileNotFoundException, JRException {
+    @Autowired
+    EmailService emailService;
+
+    public void exportCourses() throws FileNotFoundException, JRException, MessagingException {
         var coursesReportProjections = courseRepository.findAllCoursesAndStudentCount();
 
         File file = ResourceUtils.getFile("classpath:reports/Courses.jrxml");
@@ -28,7 +32,7 @@ public class ReportService {
         this.generateReport(file, dataSource);
     }
 
-    private void generateReport(File file, JRBeanCollectionDataSource dataSource) throws JRException {
+    private void generateReport(File file, JRBeanCollectionDataSource dataSource) throws JRException, MessagingException {
         String path = "C:\\Users\\joaos\\Downloads";
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -37,8 +41,10 @@ public class ReportService {
         parameters.put("USER_NAME", "João Sipauba");
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
-        JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\coursesReport.pdf");
-//        ByteArrayOutputStream output = new ByteArrayOutputStream();
-//        JasperExportManager.exportReportToPdfStream(jasperPrint, output);
+//        JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\coursesReport.pdf");
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        JasperExportManager.exportReportToPdfStream(jasperPrint, output);
+
+        emailService.sendEmailWithFile(output);
     }
 }
