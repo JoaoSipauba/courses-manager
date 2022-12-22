@@ -3,14 +3,18 @@ package com.api.coursesmanager.controllers;
 import com.api.coursesmanager.dtos.CourseDto;
 import com.api.coursesmanager.models.CourseModel;
 import com.api.coursesmanager.services.CourseService;
+import com.api.coursesmanager.services.ReportService;
 import com.api.coursesmanager.services.StudentService;
+import net.sf.jasperreports.engine.JRException;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -21,15 +25,13 @@ import java.util.UUID;
 @RequestMapping("/courses")
 public class CourseController {
 
-    final CourseService courseService;
-    final StudentService studentService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private StudentService studentService;
+    @Autowired
+    private ReportService reportService;
 
-    public CourseController(CourseService courseService, StudentService studentService) {
-        this.courseService = courseService;
-        this.studentService = studentService;
-    }
-
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Object> saveCourse(@RequestBody @Valid CourseDto courseDto ){
         var courseModel = new CourseModel();
@@ -57,7 +59,6 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(studentService.findByCourseId(id));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCourse(@PathVariable(value = "id") UUID id,
                                                @RequestBody @Valid CourseDto courseDto){
@@ -72,7 +73,6 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.save(courseModel));
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCourse(@PathVariable(value = "id") UUID id){
         Optional<CourseModel> courseModelOptional = courseService.findById(id);
@@ -82,5 +82,13 @@ public class CourseController {
         courseService.delete(courseModelOptional.get());
 
         return ResponseEntity.status(HttpStatus.OK).body("Course deleted successfully.");
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<Object> generateCoursesReport() throws FileNotFoundException, JRException, MessagingException {
+
+        reportService.exportCourses();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

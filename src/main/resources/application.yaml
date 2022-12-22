@@ -1,9 +1,4 @@
 spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/courses-manager
   datasource:
     url: jdbc:postgresql://localhost:5432/courses-manager-db
     username: postgres
@@ -16,6 +11,17 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  mail:
+    host: email-smtp.sa-east-1.amazonaws.com
+    port: 587
+    username: AKIAWTKIPISH7MJH72HB
+    password: BO33MQd4PLgBaDPfgq6XfadqTUEKNP7A7CL7BB6WeiSH
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 3333
 
@@ -27,8 +33,6 @@ keycloak:
   ssl-required: external
   public-client: true
   principal-attribute: preferred_username
-
-
 
 # SWAGGER CONFIGURATION
 springdoc:
