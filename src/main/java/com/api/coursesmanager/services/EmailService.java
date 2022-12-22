@@ -18,20 +18,19 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendEmailWithFile(ByteArrayOutputStream file) throws MessagingException {
+    public void sendEmailWithFile(ByteArrayOutputStream file) {
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         InputStreamSource attachment = new ByteArrayResource(file.toByteArray());
         JwtUtils jwtUtils = new JwtUtils();
 
-        helper.setFrom("joaosipauz@gmail.com");
-        helper.setTo(jwtUtils.getEmail());
-        helper.setSubject("Relátorio Automático");
-        helper.setText("Esse é um email automático, favor não responder.");
-        helper.addAttachment("Relatorio.pdf", attachment);
-
         try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("joaosipauz@gmail.com");
+            helper.setTo(jwtUtils.getEmail());
+            helper.setSubject("Relátorio Automático");
+            helper.setText("Esse é um email automático, favor não responder.");
+            helper.addAttachment("Relatorio.pdf", attachment);
             emailSender.send(message);
         }
         catch (Exception e){

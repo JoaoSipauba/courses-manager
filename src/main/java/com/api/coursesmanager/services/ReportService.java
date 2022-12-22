@@ -24,7 +24,7 @@ public class ReportService {
     @Autowired
     EmailService emailService;
 
-    public void exportCourses() throws FileNotFoundException, JRException, MessagingException {
+    public void exportCourses() throws FileNotFoundException, JRException {
         var coursesReportProjections = courseRepository.findAllCoursesAndStudentCount();
 
         File file = ResourceUtils.getFile("classpath:reports/Courses.jrxml");
@@ -33,13 +33,12 @@ public class ReportService {
         this.generateReport(file, dataSource);
     }
 
-    private void generateReport(File file, JRBeanCollectionDataSource dataSource) throws JRException, MessagingException {
-        String path = "C:\\Users\\joaos\\Downloads";
+    private void generateReport(File file, JRBeanCollectionDataSource dataSource) throws JRException {
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         Map<String, Object> parameters = new HashMap<>();
-
         JwtUtils jwtUtils = new JwtUtils();
+
         parameters.put("USER_NAME", jwtUtils.getUsername());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
