@@ -1,6 +1,7 @@
 package com.api.coursesmanager.services;
 
 import com.api.coursesmanager.Utils.JwtUtils;
+import com.api.coursesmanager.exceptions.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
@@ -29,6 +30,11 @@ public class EmailService {
         helper.setText("Esse é um email automático, favor não responder.");
         helper.addAttachment("Relatorio.pdf", attachment);
 
-        emailSender.send(message);
+        try {
+            emailSender.send(message);
+        }
+        catch (Exception e){
+            throw new EmailException("Erro ao enviar email", e);
+        }
     }
 }
