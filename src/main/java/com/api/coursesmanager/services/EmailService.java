@@ -23,9 +23,10 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         InputStreamSource attachment = new ByteArrayResource(file.toByteArray());
+        JwtUtils jwtUtils = new JwtUtils();
 
         helper.setFrom("joaosipauz@gmail.com");
-        helper.setTo(JwtUtils.getEmail());
+        helper.setTo(jwtUtils.getEmail());
         helper.setSubject("Relátorio Automático");
         helper.setText("Esse é um email automático, favor não responder.");
         helper.addAttachment("Relatorio.pdf", attachment);

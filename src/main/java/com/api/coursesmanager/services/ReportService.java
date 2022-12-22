@@ -38,7 +38,9 @@ public class ReportService {
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("USER_NAME", JwtUtils.getUsername());
+
+        JwtUtils jwtUtils = new JwtUtils();
+        parameters.put("USER_NAME", jwtUtils.getUsername());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
