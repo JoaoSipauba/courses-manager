@@ -1,5 +1,6 @@
 package com.api.coursesmanager.services;
 
+import com.api.coursesmanager.Utils.JwtUtils;
 import com.api.coursesmanager.repositories.CourseRepository;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -36,12 +37,10 @@ public class ReportService {
         String path = "C:\\Users\\joaos\\Downloads";
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("USER_NAME", "João Sipauba");
+        parameters.put("USER_NAME", JwtUtils.getUsername());
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 
-//        JasperExportManager.exportReportToPdfFile(jasperPrint, path + "\\coursesReport.pdf");
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint, output);
 
